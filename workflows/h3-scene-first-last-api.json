@@ -1,0 +1,204 @@
+{
+  "model": {
+    "class_type": "UNETLoader",
+    "inputs": {
+      "unet_name": "minimax_h3_fl2va_pruned_int8_convrot.safetensors",
+      "weight_dtype": "default"
+    }
+  },
+  "turbo": {
+    "class_type": "LoraLoaderModelOnly",
+    "inputs": {
+      "model": [
+        "model",
+        0
+      ],
+      "lora_name": "minimax_h3_fl2v_turbo_4step_v1.0_768p_comfyui_bf16.safetensors",
+      "strength_model": 1
+    }
+  },
+  "chunks": {
+    "class_type": "MiniMaxChunkFeedForward",
+    "inputs": {
+      "model": [
+        "turbo",
+        0
+      ],
+      "chunks": 4,
+      "seq_threshold": 2048
+    }
+  },
+  "attention": {
+    "class_type": "MiniMaxLowVRAMAttention",
+    "inputs": {
+      "model": [
+        "chunks",
+        0
+      ],
+      "head_chunks": 4
+    }
+  },
+  "shift": {
+    "class_type": "MiniMaxH3SigmaShift",
+    "inputs": {
+      "model": [
+        "attention",
+        0
+      ],
+      "shift_video": 12,
+      "shift_audio": 3
+    }
+  },
+  "encoder": {
+    "class_type": "CLIPLoader",
+    "inputs": {
+      "clip_name": "qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors",
+      "type": "minimax",
+      "device": "default"
+    }
+  },
+  "vae": {
+    "class_type": "VAELoader",
+    "inputs": {
+      "vae_name": "minimax_h3_video_vae_fp16.safetensors"
+    }
+  },
+  "scene_start": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "scene-start.png"
+    }
+  },
+  "scene_end": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "scene-end.png"
+    }
+  },
+  "conditioning": {
+    "class_type": "MiniMaxH3ImageToVideo",
+    "inputs": {
+      "clip": [
+        "encoder",
+        0
+      ],
+      "vae": [
+        "vae",
+        0
+      ],
+      "prompt": "Describe the action between the supplied first and last images.",
+      "width": 768,
+      "height": 448,
+      "length": 124,
+      "first_frame": [
+        "scene_start",
+        0
+      ],
+      "last_frame": [
+        "scene_end",
+        0
+      ]
+    }
+  },
+  "guider": {
+    "class_type": "BasicGuider",
+    "inputs": {
+      "model": [
+        "shift",
+        0
+      ],
+      "conditioning": [
+        "conditioning",
+        0
+      ]
+    }
+  },
+  "noise": {
+    "class_type": "RandomNoise",
+    "inputs": {
+      "noise_seed": 42
+    }
+  },
+  "sampler": {
+    "class_type": "KSamplerSelect",
+    "inputs": {
+      "sampler_name": "res_multistep"
+    }
+  },
+  "sigmas": {
+    "class_type": "BasicScheduler",
+    "inputs": {
+      "model": [
+        "shift",
+        0
+      ],
+      "scheduler": "beta",
+      "steps": 4,
+      "denoise": 1
+    }
+  },
+  "sample": {
+    "class_type": "SamplerCustomAdvanced",
+    "inputs": {
+      "noise": [
+        "noise",
+        0
+      ],
+      "guider": [
+        "guider",
+        0
+      ],
+      "sampler": [
+        "sampler",
+        0
+      ],
+      "sigmas": [
+        "sigmas",
+        0
+      ],
+      "latent_image": [
+        "conditioning",
+        1
+      ]
+    }
+  },
+  "decode": {
+    "class_type": "VAEDecodeTiled",
+    "inputs": {
+      "samples": [
+        "sample",
+        0
+      ],
+      "vae": [
+        "vae",
+        0
+      ],
+      "tile_size": 512,
+      "overlap": 64,
+      "temporal_size": 16,
+      "temporal_overlap": 4
+    }
+  },
+  "video": {
+    "class_type": "CreateVideo",
+    "inputs": {
+      "images": [
+        "decode",
+        0
+      ],
+      "fps": 24
+    }
+  },
+  "save": {
+    "class_type": "SaveVideo",
+    "inputs": {
+      "video": [
+        "video",
+        0
+      ],
+      "filename_prefix": "FilmStudio/Scenes/H3",
+      "format": "auto",
+      "format.codec": "h264"
+    }
+  }
+}

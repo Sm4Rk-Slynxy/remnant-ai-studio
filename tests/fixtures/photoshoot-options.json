@@ -1,0 +1,52 @@
+{
+  "person": {
+    "leer": "",
+    "sektionen": [
+      {
+        "name": "Person",
+        "felder": [
+          [
+            "hairColor",
+            "ageExact",
+            "details"
+          ]
+        ]
+      }
+    ],
+    "namen": {
+      "hairColor": "Hair color"
+    },
+    "felder": {
+      "hairColor": [
+        {
+          "label": "Copper",
+          "wert": "copper red hair"
+        },
+        {
+          "label": "Schwarz",
+          "wert": "black hair"
+        }
+      ]
+    }
+  },
+  "shooting": {
+    "kanten": [
+      1024
+    ],
+    "ratios": {
+      "2:3": 1
+    },
+    "kamera": [
+      {
+        "label": "Portrait"
+      }
+    ],
+    "fokus": [
+      {
+        "label": "Person"
+      }
+    ],
+    "listen": {}
+  },
+  "i18n": {}
+}

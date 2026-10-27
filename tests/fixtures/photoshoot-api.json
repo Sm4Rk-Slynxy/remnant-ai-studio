@@ -1,0 +1,135 @@
+{
+  "1": {
+    "class_type": "UNETLoader",
+    "inputs": {
+      "unet_name": "krea2_turbo_int8_convrot.safetensors",
+      "weight_dtype": "default"
+    }
+  },
+  "2": {
+    "class_type": "CLIPLoader",
+    "inputs": {
+      "clip_name": "qwen3vl_4b_fp8_scaled.safetensors",
+      "type": "krea2",
+      "device": "default"
+    }
+  },
+  "3": {
+    "class_type": "VAELoader",
+    "inputs": {
+      "vae_name": "qwen_image_vae.safetensors"
+    }
+  },
+  "10": {
+    "class_type": "TestPerson",
+    "inputs": {
+      "PersonState": "{\"felder\": {\"hairColor\": \"Copper\"}, \"texte\": {\"ageExact\": \"28\", \"details\": \"Green field jacket\"}}"
+    }
+  },
+  "11": {
+    "class_type": "TestSeries",
+    "inputs": {
+      "ShootingState": "{}",
+      "seed": 1
+    }
+  },
+  "20": {
+    "class_type": "PrimitiveString",
+    "inputs": {
+      "value": "Rooftop greenhouse"
+    }
+  },
+  "21": {
+    "class_type": "PrimitiveString",
+    "inputs": {
+      "value": "Soft morning light"
+    }
+  },
+  "22": {
+    "class_type": "PrimitiveString",
+    "inputs": {
+      "value": "{camera}, {scene}, {person}, {pose}, {expression}, {style}"
+    }
+  },
+  "30": {
+    "class_type": "TestOnlyFixture",
+    "inputs": {
+      "value": "synthetic"
+    }
+  },
+  "31": {
+    "class_type": "TestOnlyFixture",
+    "inputs": {
+      "value": "synthetic"
+    }
+  },
+  "32": {
+    "class_type": "TestOnlyFixture",
+    "inputs": {
+      "value": "synthetic"
+    }
+  },
+  "33": {
+    "class_type": "TestOnlyFixture",
+    "inputs": {
+      "value": "synthetic"
+    }
+  },
+  "50": {
+    "class_type": "TestOnlyFixture",
+    "inputs": {
+      "value": "synthetic"
+    }
+  },
+  "40": {
+    "class_type": "TestSampler",
+    "inputs": {
+      "positive": [
+        "31",
+        0
+      ],
+      "steps": 8,
+      "cfg": 1,
+      "model": [
+        "1",
+        0
+      ]
+    }
+  },
+  "41": {
+    "class_type": "TestResize",
+    "inputs": {
+      "scale_by": 1.5
+    }
+  },
+  "42": {
+    "class_type": "TestSampler",
+    "inputs": {
+      "positive": [
+        "31",
+        0
+      ],
+      "latent_image": [
+        "41",
+        0
+      ],
+      "steps": 4,
+      "cfg": 1,
+      "denoise": 0.44,
+      "model": [
+        "1",
+        0
+      ]
+    }
+  },
+  "51": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": [
+        "50",
+        0
+      ],
+      "filename_prefix": "TestOnly"
+    }
+  }
+}

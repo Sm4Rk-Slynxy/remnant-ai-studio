@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remn@nt AI Studio</title>
+    <link rel="stylesheet" href="style.css?v=20261020-video-joiner-5">
+    <link rel="stylesheet" href="studio.css?v=20261020-video-joiner-5">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="studio-brand"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M5 5h14v14H5zM5 9h14M9 9v10M15 9v10" stroke="currentColor" stroke-width="1.6"/><path d="M8 5v4m4-4v4m4-4v4" stroke="currentColor" stroke-width="1.6"/></svg></span><div><h1>Remn@nt <span>AI Studio</span></h1><p class="app-subtitle">Story to sequence</p></div></div>
+            <span class="workspace-label"><span class="connection-dot"></span>Local workspace</span>
+        </header>
+        <nav class="workspace-nav" aria-label="Workspace">
+            <button class="btn btn-primary" id="openStudio" aria-pressed="true">Film studio</button>
+            <button class="btn btn-secondary" id="openGenerator" aria-pressed="false">Prompt generator & settings</button>
+        </nav>
+        <div id="studioRoot"></div>
+
+        <!-- Main Content -->
+        <main class="app-main">
+            <!-- Input Panel -->
+            <section class="input-panel">
+                <!-- Workflow Selector -->
+                <div class="form-group">
+                    <label for="workflow">Workflow Type</label>
+                    <select id="workflow" class="form-select">
+                        <option value="text-to-image">Text-to-Image</option>
+                        <option value="text-to-video">Text-to-Video</option>
+                        <option value="image-to-video">Image-to-Video</option>
+                    </select>
+                </div>
+
+                <!-- Model Selector -->
+                <div class="form-group">
+                    <label for="model">Target Model</label>
+                    <select id="model" class="form-select">
+                        <option value="krea-2">KREA 2 (Image)</option>
+                        <option value="ltx-25">LTX 2.5 (Video)</option>
+                        <option value="minimax-h3">MiniMax H3 (Video)</option>
+                    </select>
+                    <div class="model-tips" id="modelTips">
+                        <!-- Model-specific tips will be displayed here -->
+                    </div>
+                </div>
+
+                <!-- Input Form -->
+                <div class="form-row">
+                    <div class="form-group"><label for="generatorDuration">H3 clip duration (seconds)</label><input id="generatorDuration" class="form-input" type="number" min="4" max="15" value="10"></div>
+                    <div class="form-group"><label for="generatorAspect">H3 aspect ratio</label><select id="generatorAspect" class="form-select"><option>16:9</option><option>9:16</option><option>1:1</option><option>4:3</option><option>21:9</option></select></div>
+                </div>
+                <form id="inputForm" class="input-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="genre">Genre</label>
+                            <input type="text" id="genre" class="form-input" placeholder="e.g., cyberpunk, fantasy, sci-fi">
+                        </div>
+                        <div class="form-group">
+                            <label for="mood">Mood</label>
+                            <input type="text" id="mood" class="form-input" placeholder="e.g., dark, serene, dramatic">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="artStyle">Art Style</label>
+                            <input type="text" id="artStyle" class="form-input" placeholder="e.g., digital art, oil painting">
+                        </div>
+                        <div class="form-group">
+                            <label for="setting">Setting</label>
+                            <input type="text" id="setting" class="form-input" placeholder="e.g., cityscape, forest, castle">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="characters">Characters</label>
+                            <input type="text" id="characters" class="form-input" placeholder="e.g., warrior, mage, robot">
+                        </div>
+                        <div class="form-group">
+                            <label for="colorPalette">Color Palette</label>
+                            <input type="text" id="colorPalette" class="form-input" placeholder="e.g., vibrant, neon, pastel">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="cameraAngle">Camera Angle</label>
+                            <input type="text" id="cameraAngle" class="form-input" placeholder="e.g., close-up, wide shot, bird's eye view">
+                        </div>
+                        <div class="form-group">
+                            <label for="environment">Environment</label>
+                            <input type="text" id="environment" class="form-input" placeholder="e.g., atmospheric lighting, misty, detailed background">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="action">Action / Movement</label>
+                            <input type="text" id="action" class="form-input" placeholder="e.g., dynamic pose, running, casting a spell">
+                        </div>
+                        <div class="form-group">
+                            <label for="composition">Composition</label>
+                            <input type="text" id="composition" class="form-input" placeholder="e.g., rule of thirds, shallow depth of field, 8k">
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Options -->
+                <div class="options-panel">
+                    <div class="option">
+                        <input type="checkbox" id="weighting" class="form-checkbox">
+                        <label for="weighting">Enable prompt weighting</label>
+                    </div>
+                    <div class="option">
+                        <input type="checkbox" id="randomize" class="form-checkbox">
+                        <label for="randomize">Randomize on generate</label>
+                    </div>
+                    <div class="option">
+                        <input type="checkbox" id="nsfw" class="form-checkbox">
+                        <label for="nsfw">NSFW Mode</label>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <button class="btn btn-primary" id="generateBtn">
+                         Generate Prompt
+                    </button>
+                    <button class="btn btn-secondary" id="randomizeBtn">
+                         Randomize Inputs
+                    </button>
+                    <button class="btn btn-secondary" id="clearBtn">
+                         Clear
+                    </button>
+                </div>
+                <div class="gen-status" id="genStatus" hidden></div>
+            </section>
+
+            <!-- Output Panel -->
+            <section class="output-panel">
+                <div class="prompt-card">
+                    <div class="card-header">
+                        <span class="card-title">Positive Prompt</span>
+                        <div class="card-actions">
+                            <button class="btn btn-small btn-outline" id="copyPositive"> Copy</button>
+                            <button class="btn btn-small btn-outline" id="savePrompt"> Save</button>
+                        </div>
+                    </div>
+                    <textarea class="prompt-textarea" id="positivePrompt" rows="14" readonly placeholder="Your positive prompt will appear here..."></textarea>
+                </div>
+
+                <div class="prompt-card">
+                    <div class="card-header">
+                        <span class="card-title">Negative Prompt</span>
+                        <div class="card-actions">
+                            <button class="btn btn-small btn-outline" id="copyNegative"> Copy</button>
+                        </div>
+                    </div>
+                    <textarea class="prompt-textarea" id="negativePrompt" rows="5" readonly placeholder="Your negative prompt will appear here..."></textarea>
+                </div>
+
+                <div class="seed-card">
+                    <div class="seed-content">
+                        <span class="seed-label">Seed:</span>
+                        <span class="seed-value" id="seedValue">0</span>
+                    </div>
+                    <div class="seed-actions">
+                        <button class="btn btn-small btn-outline" id="regenerateSeed"> Regenerate</button>
+                        <button class="btn btn-small btn-outline" id="copySeed"> Copy</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer / Tabs -->
+        <footer class="app-footer">
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="collections"> Collections</button>
+                <button class="tab-btn" data-tab="templates"> Templates</button>
+                <button class="tab-btn" data-tab="settings"> Settings</button>
+            </div>
+
+            <div class="tab-panels">
+                <!-- Collections Tab -->
+                <div class="tab-panel active" id="collectionsPanel">
+                    <div class="collections-header">
+                        <button class="btn btn-small btn-primary" id="createCollectionBtn"> New Collection</button>
+                    </div>
+                    <div class="collections-list" id="collectionsList">
+                        <!-- Collections will be rendered here -->
+                    </div>
+                    <div class="collection-view" id="collectionView" style="display: none;">
+                        <button class="btn btn-small btn-secondary" id="backToCollections">← Back</button>
+                        <h3 id="currentCollectionName"></h3>
+                        <div class="saved-prompts-list" id="savedPromptsList">
+                            <!-- Saved prompts will be rendered here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Templates Tab -->
+                <div class="tab-panel" id="templatesPanel">
+                    <div class="template-selector">
+                        <label for="templateWorkflow">Workflow:</label>
+                        <select id="templateWorkflow" class="form-select">
+                            <option value="text-to-image">Text-to-Image</option>
+                            <option value="text-to-video">Text-to-Video</option>
+                            <option value="image-to-video">Image-to-Video</option>
+                        </select>
+                    </div>
+                    <div class="template-editor">
+                        <div class="form-group">
+                            <label>Positive Prompt Template</label>
+                            <textarea class="template-textarea" id="positiveTemplate" placeholder="Use {placeholder} for input values"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Negative Prompt Template</label>
+                            <textarea class="template-textarea" id="negativeTemplate" placeholder="Use {placeholder} for input values"></textarea>
+                        </div>
+                        <div class="template-placeholders">
+                            <span class="placeholder-tag">{genre}</span>
+                            <span class="placeholder-tag">{mood}</span>
+                            <span class="placeholder-tag">{artStyle}</span>
+                            <span class="placeholder-tag">{setting}</span>
+                            <span class="placeholder-tag">{characters}</span>
+                            <span class="placeholder-tag">{colorPalette}</span>
+                        </div>
+                        <button class="btn btn-small btn-primary" id="saveTemplateBtn"> Save Template</button>
+                    </div>
+                </div>
+
+                <!-- Settings Tab -->
+                <div class="tab-panel" id="settingsPanel">
+                    <!-- Local AI Settings -->
+                    <div class="settings-section">
+                        <h3> Local AI Connection</h3>
+                        <div class="form-group">
+                            <label for="aiBackend">Backend Type</label>
+                            <select id="aiBackend" class="form-select">
+                                <option value="openai">OpenAI-compatible (LMStudio, Unsloth)</option>
+                                <option value="comfyui">ComfyUI (use Film studio for rendering)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="aiEndpoint">API Endpoint</label>
+                            <input type="text" id="aiEndpoint" class="form-input" placeholder="e.g., http://127.0.0.1:8000/v1 (auto-appends /chat/completions)" style="font-family: monospace;">
+                        </div>
+                        <div class="form-group">
+                            <label for="aiModel">Model Name</label>
+                            <input type="text" id="aiModel" class="form-input" placeholder="e.g., llama3, qwen2, etc.">
+                        </div>
+                        <div class="form-group">
+                            <label for="aiApiKey">API Key <span style="color: var(--text-secondary); font-size: 0.75rem;">(optional)</span></label>
+                            <div style="display: flex; gap: 5px;">
+                                <input type="password" id="aiApiKey" class="form-input" placeholder="Enter API key if required">
+                                <button class="btn btn-small btn-outline" id="toggleApiKey" title="Show/Hide API Key"></button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="option">
+                                <input type="checkbox" id="aiEnabled" class="form-checkbox">
+                                <label for="aiEnabled">Enable Local AI Prompt Generation</label>
+                            </div>
+                        </div>
+                        <button class="btn btn-small btn-outline" id="testAiConnection"> Test Connection</button>
+                    </div>
+
+                    <!-- Preset Editor -->
+                    <div class="settings-section">
+                        <h3> Preset Values</h3>
+                        <p class="settings-help">Edit comma-separated values for randomization</p>
+                        <div class="preset-editor">
+                            <div class="form-group">
+                                <label>Genres</label>
+                                <input type="text" id="presetGenres" class="form-input" placeholder="cyberpunk, fantasy, sci-fi, ...">
+                            </div>
+                            <div class="form-group">
+                                <label>Moods</label>
+                                <input type="text" id="presetMoods" class="form-input" placeholder="dark, serene, dramatic, ...">
+                            </div>
+                            <div class="form-group">
+                                <label>Art Styles</label>
+                                <input type="text" id="presetArtStyles" class="form-input" placeholder="digital art, oil painting, ...">
+                            </div>
+                            <div class="form-group">
+                                <label>Settings</label>
+                                <input type="text" id="presetSettings" class="form-input" placeholder="cityscape, forest, castle, ...">
+                            </div>
+                            <div class="form-group">
+                                <label>Characters</label>
+                                <input type="text" id="presetCharacters" class="form-input" placeholder="warrior, mage, robot, ...">
+                            </div>
+                            <div class="form-group">
+                                <label>Color Palettes</label>
+                                <input type="text" id="presetColors" class="form-input" placeholder="vibrant, neon, pastel, ...">
+                            </div>
+                            <div class="form-group">
+                                <label>Camera Angles</label>
+                                <input type="text" id="presetCameraAngles" class="form-input" placeholder="close-up, wide shot, bird's eye view, ...">
+                            </div>
+                            <div class="form-group">
+                                <label>Environments</label>
+                                <input type="text" id="presetEnvironments" class="form-input" placeholder="atmospheric lighting, misty, detailed background, ...">
+                            </div>
+                            <div class="form-group">
+                                <label>Actions</label>
+                                <input type="text" id="presetActions" class="form-input" placeholder="dynamic pose, running, casting a spell, ...">
+                            </div>
+                            <div class="form-group">
+                                <label>Compositions</label>
+                                <input type="text" id="presetCompositions" class="form-input" placeholder="rule of thirds, shallow depth of field, 8k, ...">
+                            </div>
+                            <button class="btn btn-small btn-primary" id="savePresetsBtn"> Save Presets</button>
+                        </div>
+                    </div>
+
+                    <!-- Export/Import -->
+                    <div class="settings-section">
+                        <h3> Data Management</h3>
+                        <div class="settings-row">
+                            <button class="btn btn-small btn-outline" id="exportDataBtn"> Export All Data</button>
+                            <button class="btn btn-small btn-outline" id="importDataBtn"> Import Data</button>
+                            <input type="file" id="importFile" accept=".json" style="display: none;">
+                        </div>
+                    </div>
+
+                    <!-- Reset -->
+                    <div class="settings-section">
+                        <h3> Reset</h3>
+                        <button class="btn btn-small btn-outline" id="resetDataBtn"> Reset All Data</button>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Modals -->
+    <!-- Create Collection Modal -->
+    <div class="modal" id="createCollectionModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Create New Collection</h3>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="collectionName" class="form-input" placeholder="Collection name...">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-small btn-secondary" id="cancelCollection">Cancel</button>
+                <button class="btn btn-small btn-primary" id="saveCollection">Create</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Save Prompt Modal -->
+    <div class="modal" id="savePromptModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Save Prompt</h3>
+            </div>
+            <div class="modal-body">
+                <select id="saveToCollection" class="form-select">
+                    <!-- Collections will be rendered here -->
+                </select>
+                <button class="btn btn-small btn-outline" id="saveToNewCollection" style="margin-top: 10px; width: 100%;"> Save to new collection</button>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-small btn-secondary" id="cancelSave">Cancel</button>
+                <button class="btn btn-small btn-primary" id="confirmSave">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Saved Prompt Detail Modal -->
+    <div class="modal" id="promptDetailModal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h3>Saved Prompt</h3>
+            </div>
+            <div class="modal-body" id="promptDetailContent">
+                <!-- Prompt details will be rendered here -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-small btn-secondary" id="closePromptDetail">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="local-ai.js?v=20261020-video-joiner-5"></script>
+    <script src="script.js?v=20261020-video-joiner-5"></script>
+    <script src="image-library.js?v=20261020-video-joiner-5"></script>
+    <script src="render-quality.js?v=20261020-video-joiner-5"></script>
+    <script src="image-core.js?v=20261020-video-joiner-5"></script>
+    <script src="workflow-presets.js?v=20261020-video-joiner-5"></script>
+    <script src="character-core.js?v=20261020-video-joiner-5"></script>
+    <script src="studio-core.js?v=20261020-video-joiner-5"></script>
+    <script src="h3-prompts.js?v=20261020-video-joiner-5"></script>
+    <script src="music-core.js?v=20261020-video-joiner-5"></script>
+    <script src="music-studio.js?v=20261020-video-joiner-5"></script>
+    <script src="image-gallery.js?v=20261020-video-joiner-5"></script>
+    <script src="image-studio.js?v=20261020-video-joiner-5"></script>
+    <script src="character-workflow.js?v=20261020-video-joiner-5"></script>
+    <script src="character-studio.js?v=20261020-video-joiner-5"></script>
+    <script src="character-director.js?v=20261020-video-joiner-5"></script>
+    <script src="photoshoot-core.js?v=20261020-video-joiner-5"></script>
+    <script src="photoshoot-studio.js?v=20261020-video-joiner-5"></script>
+    <script src="easy-studio-core.js?v=20261020-video-joiner-5"></script>
+    <script src="easy-studio.js?v=20261020-video-joiner-5"></script>
+    <script src="sequence-core.js?v=20261020-video-joiner-5"></script>
+    <script src="sequence-studio.js?v=20261020-video-joiner-5"></script>
+    <script src="clip-quality.js?v=20261020-video-joiner-5"></script>
+    <script src="video-join-core.js?v=20261020-video-joiner-5"></script>
+    <script src="video-joiner.js?v=20261020-video-joiner-5"></script>
+    <script src="studio.js?v=20261020-video-joiner-5"></script>
+</body>
+</html>

@@ -1,0 +1,1931 @@
+{
+  "BasicGuider": {
+    "input": {
+      "required": {
+        "model": [
+          "MODEL",
+          {}
+        ],
+        "conditioning": [
+          "CONDITIONING",
+          {}
+        ]
+      }
+    },
+    "output": [
+      "GUIDER"
+    ],
+    "output_is_list": [
+      false
+    ]
+  },
+  "BasicScheduler": {
+    "input": {
+      "required": {
+        "model": [
+          "MODEL",
+          {}
+        ],
+        "scheduler": [
+          "COMBO",
+          {
+            "multiselect": false,
+            "options": [
+              "simple",
+              "sgm_uniform",
+              "karras",
+              "exponential",
+              "ddim_uniform",
+              "beta",
+              "normal",
+              "linear_quadratic",
+              "kl_optimal",
+              "beta57"
+            ]
+          }
+        ],
+        "steps": [
+          "INT",
+          {
+            "default": 20,
+            "min": 1,
+            "max": 10000
+          }
+        ],
+        "denoise": [
+          "FLOAT",
+          {
+            "default": 1.0,
+            "min": 0.0,
+            "max": 1.0,
+            "step": 0.01
+          }
+        ]
+      }
+    },
+    "output": [
+      "SIGMAS"
+    ],
+    "output_is_list": [
+      false
+    ]
+  },
+  "CLIPLoader": {
+    "input": {
+      "required": {
+        "clip_name": [
+          [
+            "qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors",
+            "qwen3vl_4b_fp8_scaled.safetensors"
+          ]
+        ],
+        "type": [
+          [
+            "stable_diffusion",
+            "stable_cascade",
+            "sd3",
+            "stable_audio",
+            "mochi",
+            "ltxv",
+            "pixart",
+            "cosmos",
+            "lumina2",
+            "wan",
+            "hidream",
+            "chroma",
+            "ace",
+            "omnigen2",
+            "qwen_image",
+            "hunyuan_image",
+            "flux2",
+            "ovis",
+            "longcat_image",
+            "cogvideox",
+            "lens",
+            "pixeldit",
+            "ideogram4",
+            "boogu",
+            "krea2",
+            "joyimage",
+            "mage",
+            "minimax",
+            "yue2",
+            "flux3",
+            "moss_image"
+          ]
+        ]
+      },
+      "optional": {
+        "device": [
+          [
+            "default",
+            "cpu"
+          ],
+          {
+            "advanced": true
+          }
+        ]
+      }
+    },
+    "output": [
+      "CLIP"
+    ],
+    "output_is_list": [
+      false
+    ]
+  },
+  "CLIPTextEncode": {
+    "input": {
+      "required": {
+        "text": [
+          "STRING",
+          {
+            "multiline": true,
+            "dynamicPrompts": true,
+            "tooltip": "The text to be encoded."
+          }
+        ],
+        "clip": [
+          "CLIP",
+          {
+            "tooltip": "The CLIP model used for encoding the text."
+          }
+        ]
+      }
+    },
+    "output": [
+      "CONDITIONING"
+    ],
+    "output_is_list": [
+      false
+    ]
+  },
+  "CreateVideo": {
+    "input": {
+      "required": {
+        "images": [
+          "IMAGE",
+          {
+            "tooltip": "The images to create a video from."
+          }
+        ],
+        "fps": [
+          "FLOAT",
+          {
+            "default": 30.0,
+            "min": 1.0,
+            "max": 120.0,
+            "step": 1.0
+          }
+        ]
+      },
+      "optional": {
+        "audio": [
+          "AUDIO",
+          {
+            "tooltip": "The audio to add to the video."
+          }
+        ],
+        "bit_depth": [
+          "COMBO",
+          {
+            "tooltip": "Auto uses 8-bit for sRGB and 10-bit for HDR. Explicit 8-bit and 10-bit choices are independent of colorspace.",
+            "default": "auto",
+            "multiselect": false,
+            "options": [
+              "auto",
+              8,
+              10
+            ]
+          }
+        ],
+        "color_space": [
+          "COMBO",
+          {
+            "tooltip": "Colorspace of the input images. HDR selects BT.2020/HLG and HDR PQ selects BT.2020/PQ.",
+            "default": "sRGB",
+            "multiselect": false,
+            "options": [
+              "sRGB",
+              "HDR",
+              "HDR PQ"
+            ]
+          }
+        ],
+        "codec": [
+          "COMBO",
+          {
+            "tooltip": "Optionally encode the video immediately. None keeps the images in tensor form; Auto uses H.264.",
+            "advanced": true,
+            "default": "none",
+            "multiselect": false,
+            "options": [
+              "none",
+              "auto",
+              "h264",
+              "av1"
+            ]
+          }
+        ]
+      }
+    },
+    "output": [
+      "VIDEO"
+    ],
+    "output_is_list": [
+      false
+    ]
+  },
+  "EmptyLatentImage": {
+    "input": {
+      "required": {
+        "width": [
+          "INT",
+          {
+            "default": 1024,
+            "min": 16,
+            "max": 16384,
+            "step": 8,
+            "tooltip": "The width of the latent images in pixels."
+          }
+        ],
+        "height": [
+          "INT",
+          {
+            "default": 1024,
+            "min": 16,
+            "max": 16384,
+            "step": 8,
+            "tooltip": "The height of the latent images in pixels."
+          }
+        ],
+        "batch_size": [
+          "INT",
+          {
+            "default": 1,
+            "min": 1,
+            "max": 4096,
+            "tooltip": "The number of latent images in the batch."
+          }
+        ]
+      }
+    },
+    "output": [
+      "LATENT"
+    ],
+    "output_is_list": [
+      false
+    ]
+  },
+  "EmptySD3LatentImage": {
+    "input": {
+      "required": {
+        "width": [
+          "INT",
+          {
+            "default": 1024,
+            "min": 16,
+            "max": 16384,
+            "step": 16
+          }
+        ],
+        "height": [
+          "INT",
+          {
+            "default": 1024,
+            "min": 16,
+            "max": 16384,
+            "step": 16
+          }
+        ],
+        "batch_size": [
+          "INT",
+          {
+            "default": 1,
+            "min": 1,
+            "max": 4096
+          }
+        ]
+      }
+    },
+    "output": [
+      "LATENT"
+    ],
+    "output_is_list": [
+      false
+    ]
+  },
+  "ImageScale": {
+    "input": {
+      "required": {
+        "image": [
+          "IMAGE"
+        ],
+        "upscale_method": [
+          [
+            "nearest-exact",
+            "bilinear",
+            "area",
+            "bicubic",
+            "lanczos"
+          ]
+        ],
+        "width": [
+          "INT",
+          {
+            "default": 512,
+            "min": 0,
+            "max": 16384,
+            "step": 1
+          }
+        ],
+        "height": [
+          "INT",
+          {
+            "default": 512,
+            "min": 0,
+            "max": 16384,
+            "step": 1
+          }
+        ],
+        "crop": [
+          [
+            "disabled",
+            "center"
+          ]
+        ]
+      }
+    },
+    "output": [
+      "IMAGE"
+    ],
+    "output_is_list": [
+      false
+    ]
+  },
+  "ImageScaleBy": {
+    "input": {
+      "required": {
+        "image": [
+          "IMAGE"
+        ],
+        "upscale_method": [
+          [
+            "nearest-exact",
+            "bilinear",
+            "area",
+            "bicubic",
+            "lanczos"
+          ]
+        ],
+        "scale_by": [
+          "FLOAT",
+          {
+            "default": 1.0,
+            "min": 0.01,
+            "max": 8.0,
+            "step": 0.01
+          }
+        ]
+      }
+    },
+    "output": [
+      "IMAGE"
+    ],
+    "output_is_list": [
+      false
+    ]
+  },
+  "ImageUpscaleWithModel": {
+    "input": {
+      "required": {
+        "upscale_model": [
+          "UPSCALE_MODEL",
+          {}
+        ],
+        "image": [
+          "IMAGE",
+          {}
+        ]
+      }
+    },
+    "output": [
+      "IMAGE"
+    ],
+    "output_is_list": [
+      false
+    ]
+  },
+  "KSampler": {
+    "input": {
+      "required": {
+        "model": [
+          "MODEL",
+          {
+            "tooltip": "The model used for denoising the input latent."
+          }
+        ],
+        "seed": [
+          "INT",
+          {
+            "default": 0,
+            "min": 0,
+            "max": 18446744073709551615,
+            "control_after_generate": true,
+            "tooltip": "The random seed used for creating the noise."
+          }
+        ],
+        "steps": [
+          "INT",
+          {
+            "default": 20,
+            "min": 1,
+            "max": 10000,
+            "tooltip": "The number of steps used in the denoising process."
+          }
+        ],
+        "cfg": [
+          "FLOAT",
+          {
+            "default": 8.0,
+            "min": 0.0,
+            "max": 100.0,
+            "step": 0.1,
+            "round": 0.01,
+            "tooltip": "The Classifier-Free Guidance scale balances creativity and adherence to the prompt. Higher values result in images more closely matching the prompt however too high values will negatively impact quality."
+          }
+        ],
+        "sampler_name": [
+          [
+            "euler",
+            "euler_cfg_pp",
+            "euler_ancestral",
+            "euler_ancestral_cfg_pp",
+            "heun",
+            "heunpp2",
+            "exp_heun_2_x0",
+            "exp_heun_2_x0_sde",
+            "dpm_2",
+            "dpm_2_ancestral",
+            "lms",
+            "dpm_fast",
+            "dpm_adaptive",
+            "dpmpp_2s_ancestral",
+            "dpmpp_2s_ancestral_cfg_pp",
+            "dpmpp_sde",
+            "dpmpp_sde_gpu",
+            "dpmpp_2m",
+            "dpmpp_2m_cfg_pp",
+            "dpmpp_2m_sde",
+            "dpmpp_2m_sde_gpu",
+            "dpmpp_2m_sde_heun",
+            "dpmpp_2m_sde_heun_gpu",
+            "dpmpp_3m_sde",
+            "dpmpp_3m_sde_gpu",
+            "ddpm",
+            "lcm",
+            "ipndm",
+            "ipndm_v",
+            "deis",
+            "cfgpp_ud10_ab",
+            "res_multistep",
+            "res_multistep_cfg_pp",
+            "res_multistep_ancestral",
+            "res_multistep_ancestral_cfg_pp",
+            "gradient_estimation",
+            "gradient_estimation_cfg_pp",
+            "er_sde",
+            "seeds_2",
+            "seeds_3",
+            "sa_solver",
+            "sa_solver_pece",
+            "ddim",
+            "uni_pc",
+            "uni_pc_bh2"
+          ],
+          {
+            "tooltip": "The algorithm used when sampling, this can affect the quality, speed, and style of the generated output."
+          }
+        ],
+        "scheduler": [
+          [
+            "simple",
+            "sgm_uniform",
+            "karras",
+            "exponential",
+            "ddim_uniform",
+            "beta",
+            "normal",
+            "linear_quadratic",
+            "kl_optimal",
+            "beta57"
+          ],
+          {
+            "tooltip": "The scheduler controls how noise is gradually removed to form the image."
+          }
+        ],
+        "positive": [
+          "CONDITIONING",
+          {
+            "tooltip": "The conditioning describing the attributes you want to include in the image."
+          }
+        ],
+        "negative": [
+          "CONDITIONING",
+          {
+            "tooltip": "The conditioning describing the attributes you want to exclude from the image."
+          }
+        ],
+        "latent_image": [
+          "LATENT",
+          {
+            "tooltip": "The latent image to denoise."
+          }
+        ],
+        "denoise": [
+          "FLOAT",
+          {
+            "default": 1.0,
+            "min": 0.0,
+            "max": 1.0,
+            "step": 0.01,
+            "tooltip": "The amount of denoising applied, lower values will maintain the structure of the initial image allowing for image to image sampling."
+          }
+        ]
+      }
+    },
+    "output": [
+      "LATENT"
+    ],
+    "output_is_list": [
+      false
+    ]
+  },
+  "KSamplerSelect": {
+    "input": {
+      "required": {
+        "sampler_name": [
+          "COMBO",
+          {
+            "multiselect": false,
+            "options": [
+              "euler",
+              "euler_cfg_pp",
+              "euler_ancestral",
+              "euler_ancestral_cfg_pp",
+              "heun",
+              "heunpp2",
+              "exp_heun_2_x0",
+              "exp_heun_2_x0_sde",
+              "dpm_2",
+              "dpm_2_ancestral",
+              "lms",
+              "dpm_fast",
+              "dpm_adaptive",
+              "dpmpp_2s_ancestral",
+              "dpmpp_2s_ancestral_cfg_pp",
+              "dpmpp_sde",
+              "dpmpp_sde_gpu",
+              "dpmpp_2m",
+              "dpmpp_2m_cfg_pp",
+              "dpmpp_2m_sde",
+              "dpmpp_2m_sde_gpu",
+              "dpmpp_2m_sde_heun",
+              "dpmpp_2m_sde_heun_gpu",
+              "dpmpp_3m_sde",
+              "dpmpp_3m_sde_gpu",
+              "ddpm",
+              "lcm",
+              "ipndm",
+              "ipndm_v",
+              "deis",
+              "cfgpp_ud10_ab",
+              "res_multistep",
+              "res_multistep_cfg_pp",
+              "res_multistep_ancestral",
+              "res_multistep_ancestral_cfg_pp",
+              "gradient_estimation",
+              "gradient_estimation_cfg_pp",
+              "er_sde",
+              "seeds_2",
+              "seeds_3",
+              "sa_solver",
+              "sa_solver_pece",
+              "ddim",
+              "uni_pc",
+              "uni_pc_bh2"
+            ]
+          }
+        ]
+      }
+    },
+    "output": [
+      "SAMPLER"
+    ],
+    "output_is_list": [
+      false
+    ]
+  },
+  "Krea2EditGroundedEncode": {
+    "input": {
+      "required": {
+        "clip": [
+          "CLIP"
+        ],
+        "prompt": [
+          "STRING",
+          {
+            "multiline": true,
+            "default": ""
+          }
+        ]
+      },
+      "optional": {
+        "image": [
+          "IMAGE"
+        ],
+        "image_b": [
+          "IMAGE",
+          {
+            "tooltip": "2nd reference (subject) for multi-ref LoRAs; vision blocks in training order: scene, subject"
+          }
+        ],
+        "grounding_px": [
+          "INT",
+          {
+            "default": 768,
+            "min": 0,
+            "max": 4096,
+            "step": 64,
+            "tooltip": "cap longest side fed to Qwen3-VL; 0 = native"
+          }
+        ],
+        "system_prompt": [
+          "STRING",
+          {
+            "multiline": true,
+            "default": "",
+            "tooltip": "advanced (optional): override the grounding system prompt (empty = training default). Steers what the vision encoder attends to, e.g. facial identity detail."
+          }
+        ]
+      }
+    },
+    "output": [
+      "CONDITIONING"
+    ],
+    "output_is_list": [
+      false
+    ]
+  },
+  "Krea2EditModelPatch": {
+    "input": {
+      "required": {
+        "model": [
+          "MODEL"
+        ],
+        "source_latent": [
+          "LATENT"
+        ]
+      },
+      "optional": {
+        "source_latent_b": [
+          "LATENT",
+          {
+            "tooltip": "2nd reference (subject photo) for multi-ref LoRAs -> RoPE frame=2, training-matched order: scene first, subject second"
+          }
+        ],
+        "ref_boost": [
+          "FLOAT",
+          {
+            "default": 1.0,
+            "min": 0.0,
+            "max": 1000.0,
+            "step": 0.01,
+            "round": 0.001,
+            "tooltip": "reference-fidelity dial: multiplies target->reference attention. Applies to the LAST ref (= the subject in two-ref workflows, the only ref in single-ref). 1.0 = off, >1 pulls harder toward the reference's appearance, <1 loosens. Optimal value is model-specific"
+          }
+        ],
+        "ref_boost_a": [
+          "FLOAT",
+          {
+            "default": 1.0,
+            "min": 0.0,
+            "max": 1000.0,
+            "step": 0.01,
+            "round": 0.001,
+            "tooltip": "same dial for the FIRST ref (= the scene in two-ref workflows). No effect in single-ref workflows. 1.0 = off"
+          }
+        ],
+        "fit_mode": [
+          [
+            "fit",
+            "crop (legacy)"
+          ],
+          {
+            "default": "fit",
+            "tooltip": "how an image source fits a mismatched output aspect ratio (needs vae + source_image connected): fit = resample the source to the target grid at a centered offset \u2014 matches how this model was trained (default, use this); crop (legacy) = center-crop to the target AR then resize (v1/v1.1 geometry, only for older weights)"
+          }
+        ],
+        "ref_boost_mask": [
+          "MASK",
+          {
+            "tooltip": "optional region on the (last) reference to boost, e.g. the face; empty = whole reference"
+          }
+        ],
+        "vae": [
+          "VAE",
+          {
+            "tooltip": "RECOMMENDED with source_image: enables the blur-proof pixel-space path (crop+resize in pixels, encode internally) \u2014 immune to input/output resolution mismatches"
+          }
+        ],
+        "source_image": [
+          "IMAGE",
+          {
+            "tooltip": "source as IMAGE (with vae connected): overrides source_latent with exact pixel-space fitting \u2014 fixes blurry results from mismatched resolutions"
+          }
+        ],
+        "source_image_b": [
+          "IMAGE",
+          {
+            "tooltip": "2nd reference as IMAGE (with vae)"
+          }
+        ]
+      }
+    },
+    "output": [
+      "MODEL"
+    ],
+    "output_is_list": [
+      false
+    ]
+  },
+  "LoadImage": {
+    "input": {
+      "required": {
+        "image": [
+          [
+            "test.png"
+          ],
+          {
+            "image_upload": true
+          }
+        ]
+      }
+    },
+    "output": [
+      "IMAGE",
+      "MASK"
+    ],
+    "output_is_list": [
+      false,
+      false
+    ]
+  },
+  "LoraLoaderModelOnly": {
+    "input": {
+      "required": {
+        "model": [
+          "MODEL"
+        ],
+        "lora_name": [
+          [
+            "minimax_h3_fl2v_turbo_4step_v1.0_768p_comfyui.safetensors",
+            "example-image-style.safetensors",
+            "example-video-style.safetensors",
+            "krea2_identity_edit_v1_2.safetensors"
+          ]
+        ],
+        "strength_model": [
+          "FLOAT",
+          {
+            "default": 1.0,
+            "min": -100.0,
+            "max": 100.0,
+            "step": 0.01
+          }
+        ]
+      }
+    },
+    "output": [
+      "MODEL"
+    ],
+    "output_is_list": [
+      false
+    ]
+  },
+  "MiniMaxChunkFeedForward": {
+    "input": {
+      "required": {
+        "model": [
+          "MODEL",
+          {}
+        ],
+        "chunks": [
+          "INT",
+          {
+            "tooltip": "Number of chunks to split the feedforward tokens into. More chunks = lower peak VRAM, slightly more overhead.",
+            "default": 2,
+            "min": 1,
+            "max": 64,
+            "step": 1
+          }
+        ],
+        "seq_threshold": [
+          "INT",
+          {
+            "tooltip": "Only chunk when the packed token count exceeds this (skips tiny sequences).",
+            "default": 4096,
+            "min": 256,
+            "max": 262144,
+            "step": 256
+          }
+        ]
+      }
+    },
+    "output": [
+      "MODEL"
+    ],
+    "output_is_list": [
+      false
+    ]
+  },
+  "MiniMaxH3ImageToVideo": {
+    "input": {
+      "required": {
+        "clip": [
+          "CLIP",
+          {}
+        ],
+        "vae": [
+          "VAE",
+          {}
+        ],
+        "prompt": [
+          "STRING",
+          {
+            "multiline": true,
+            "dynamicPrompts": true
+          }
+        ],
+        "width": [
+          "INT",
+          {
+            "default": 1344,
+            "min": 32,
+            "max": 16384,
+            "step": 32
+          }
+        ],
+        "height": [
+          "INT",
+          {
+            "default": 768,
+            "min": 32,
+            "max": 16384,
+            "step": 32
+          }
+        ],
+        "length": [
+          "INT",
+          {
+            "tooltip": "Frame count at 24 fps, snapped up to the model's 17k+5 grid (124 = ~5s; trained range is ~124-362, longer is untested)",
+            "default": 124,
+            "min": 5,
+            "max": 3600,
+            "step": 17
+          }
+        ]
+      },
+      "optional": {
+        "first_frame": [
+          "IMAGE",
+          {}
+        ],
+        "last_frame": [
+          "IMAGE",
+          {}
+        ]
+      }
+    },
+    "output": [
+      "CONDITIONING",
+      "LATENT"
+    ],
+    "output_is_list": [
+      false,
+      false
+    ]
+  },
+  "MiniMaxH3SigmaShift": {
+    "input": {
+      "required": {
+        "model": [
+          "MODEL",
+          {}
+        ],
+        "shift_video": [
+          "FLOAT",
+          {
+            "default": 12.0,
+            "min": 0.01,
+            "max": 100.0,
+            "step": 0.01
+          }
+        ],
+        "shift_audio": [
+          "FLOAT",
+          {
+            "default": 3.0,
+            "min": 0.01,
+            "max": 100.0,
+            "step": 0.01
+          }
+        ]
+      }
+    },
+    "output": [
+      "MODEL"
+    ],
+    "output_is_list": [
+      false
+    ]
+  },
+  "MiniMaxLowVRAMAttention": {
+    "input": {
+      "required": {
+        "model": [
+          "MODEL",
+          {}
+        ],
+        "head_chunks": [
+          "INT",
+          {
+            "tooltip": "Number of head groups to split the attention call into. Kernel-internal transients scale down with this; heads are independent so the result is unchanged.",
+            "default": 4,
+            "min": 1,
+            "max": 56,
+            "step": 1
+          }
+        ]
+      }
+    },
+    "output": [
+      "MODEL"
+    ],
+    "output_is_list": [
+      false
+    ]
+  },
+  "ModelSamplingAuraFlow": {
+    "input": {
+      "required": {
+        "model": [
+          "MODEL"
+        ],
+        "shift": [
+          "FLOAT",
+          {
+            "default": 1.73,
+            "min": 0.0,
+            "max": 100.0,
+            "step": 0.01
+          }
+        ]
+      },
+      "optional": {
+        "sampling": [
+          [
+            "flow",
+            "img_to_img_velocity"
+          ],
+          {
+            "default": "flow",
+            "advanced": true
+          }
+        ]
+      }
+    },
+    "output": [
+      "MODEL"
+    ],
+    "output_is_list": [
+      false
+    ]
+  },
+  "RandomNoise": {
+    "input": {
+      "required": {
+        "noise_seed": [
+          "INT",
+          {
+            "default": 0,
+            "min": 0,
+            "max": 18446744073709551615,
+            "control_after_generate": true
+          }
+        ]
+      }
+    },
+    "output": [
+      "NOISE"
+    ],
+    "output_is_list": [
+      false
+    ]
+  },
+  "SamplerCustomAdvanced": {
+    "input": {
+      "required": {
+        "noise": [
+          "NOISE",
+          {}
+        ],
+        "guider": [
+          "GUIDER",
+          {}
+        ],
+        "sampler": [
+          "SAMPLER",
+          {}
+        ],
+        "sigmas": [
+          "SIGMAS",
+          {}
+        ],
+        "latent_image": [
+          "LATENT",
+          {}
+        ]
+      }
+    },
+    "output": [
+      "LATENT",
+      "LATENT"
+    ],
+    "output_is_list": [
+      false,
+      false
+    ]
+  },
+  "SaveImage": {
+    "input": {
+      "required": {
+        "images": [
+          "IMAGE",
+          {
+            "tooltip": "The images to save."
+          }
+        ],
+        "filename_prefix": [
+          "STRING",
+          {
+            "default": "ComfyUI",
+            "tooltip": "The prefix for the file to save. This may include formatting information such as %date:yyyy-MM-dd% or %Empty Latent Image.width% to include values from nodes."
+          }
+        ]
+      },
+      "hidden": {
+        "prompt": "PROMPT",
+        "extra_pnginfo": "EXTRA_PNGINFO"
+      }
+    },
+    "output": [
+      "IMAGE"
+    ],
+    "output_is_list": [
+      false
+    ]
+  },
+  "SaveVideo": {
+    "input": {
+      "required": {
+        "video": [
+          "VIDEO",
+          {
+            "tooltip": "The video to save."
+          }
+        ],
+        "filename_prefix": [
+          "STRING",
+          {
+            "tooltip": "The prefix for the file to save. This may include formatting information such as %date:yyyy-MM-dd% or %Empty Latent Image.width% to include values from nodes.",
+            "default": "video/ComfyUI",
+            "multiline": false
+          }
+        ],
+        "format": [
+          "COMFY_DYNAMICCOMBO_V3",
+          {
+            "tooltip": "The output container. Auto uses MP4 for Auto/H.264 and WebM for AV1. MP4, MKV, and WebM select a specific container.",
+            "options": [
+              {
+                "key": "auto",
+                "inputs": {
+                  "required": {
+                    "codec": [
+                      "COMFY_DYNAMICCOMBO_V3",
+                      {
+                        "tooltip": "The output video codec. Auto preserves a compatible source stream. H.264 and AV1 re-encoding support SDR, HDR (HLG), and HDR PQ.",
+                        "options": [
+                          {
+                            "key": "auto",
+                            "inputs": {
+                              "required": {}
+                            }
+                          },
+                          {
+                            "key": "h264",
+                            "inputs": {
+                              "required": {},
+                              "optional": {
+                                "encoding": [
+                                  "COMFY_DYNAMICCOMBO_V3",
+                                  {
+                                    "display_name": "encoding mode",
+                                    "tooltip": "Automatic preserves compatible H.264 streams. Re-encode applies custom encoding options.",
+                                    "options": [
+                                      {
+                                        "key": "auto",
+                                        "inputs": {
+                                          "required": {}
+                                        }
+                                      },
+                                      {
+                                        "key": "re-encode",
+                                        "inputs": {
+                                          "required": {
+                                            "crf": [
+                                              "FLOAT",
+                                              {
+                                                "tooltip": "Lower values produce higher quality and larger files.",
+                                                "default": 18.0,
+                                                "min": 0.0,
+                                                "max": 51.0,
+                                                "step": 1.0
+                                              }
+                                            ]
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            }
+                          },
+                          {
+                            "key": "av1",
+                            "inputs": {
+                              "required": {},
+                              "optional": {
+                                "encoding": [
+                                  "COMFY_DYNAMICCOMBO_V3",
+                                  {
+                                    "display_name": "encoding mode",
+                                    "tooltip": "Automatic preserves compatible AV1 streams. Re-encode applies custom encoding options.",
+                                    "options": [
+                                      {
+                                        "key": "auto",
+                                        "inputs": {
+                                          "required": {}
+                                        }
+                                      },
+                                      {
+                                        "key": "re-encode",
+                                        "inputs": {
+                                          "required": {
+                                            "crf": [
+                                              "FLOAT",
+                                              {
+                                                "tooltip": "Lower values produce higher quality and larger files.",
+                                                "default": 24.0,
+                                                "min": 0.0,
+                                                "max": 63.0,
+                                                "step": 1.0
+                                              }
+                                            ]
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "key": "mp4",
+                "inputs": {
+                  "required": {
+                    "codec": [
+                      "COMFY_DYNAMICCOMBO_V3",
+                      {
+                        "tooltip": "The output video codec. Auto preserves a compatible source stream. H.264 and AV1 re-encoding support SDR, HDR (HLG), and HDR PQ.",
+                        "options": [
+                          {
+                            "key": "auto",
+                            "inputs": {
+                              "required": {}
+                            }
+                          },
+                          {
+                            "key": "h264",
+                            "inputs": {
+                              "required": {},
+                              "optional": {
+                                "encoding": [
+                                  "COMFY_DYNAMICCOMBO_V3",
+                                  {
+                                    "display_name": "encoding mode",
+                                    "tooltip": "Automatic preserves compatible H.264 streams. Re-encode applies custom encoding options.",
+                                    "options": [
+                                      {
+                                        "key": "auto",
+                                        "inputs": {
+                                          "required": {}
+                                        }
+                                      },
+                                      {
+                                        "key": "re-encode",
+                                        "inputs": {
+                                          "required": {
+                                            "crf": [
+                                              "FLOAT",
+                                              {
+                                                "tooltip": "Lower values produce higher quality and larger files.",
+                                                "default": 18.0,
+                                                "min": 0.0,
+                                                "max": 51.0,
+                                                "step": 1.0
+                                              }
+                                            ]
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            }
+                          },
+                          {
+                            "key": "av1",
+                            "inputs": {
+                              "required": {},
+                              "optional": {
+                                "encoding": [
+                                  "COMFY_DYNAMICCOMBO_V3",
+                                  {
+                                    "display_name": "encoding mode",
+                                    "tooltip": "Automatic preserves compatible AV1 streams. Re-encode applies custom encoding options.",
+                                    "options": [
+                                      {
+                                        "key": "auto",
+                                        "inputs": {
+                                          "required": {}
+                                        }
+                                      },
+                                      {
+                                        "key": "re-encode",
+                                        "inputs": {
+                                          "required": {
+                                            "crf": [
+                                              "FLOAT",
+                                              {
+                                                "tooltip": "Lower values produce higher quality and larger files.",
+                                                "default": 24.0,
+                                                "min": 0.0,
+                                                "max": 63.0,
+                                                "step": 1.0
+                                              }
+                                            ]
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "key": "mkv",
+                "inputs": {
+                  "required": {
+                    "codec": [
+                      "COMFY_DYNAMICCOMBO_V3",
+                      {
+                        "tooltip": "The output video codec. Auto preserves a compatible source stream. H.264 and AV1 re-encoding support SDR, HDR (HLG), and HDR PQ.",
+                        "options": [
+                          {
+                            "key": "auto",
+                            "inputs": {
+                              "required": {}
+                            }
+                          },
+                          {
+                            "key": "h264",
+                            "inputs": {
+                              "required": {},
+                              "optional": {
+                                "encoding": [
+                                  "COMFY_DYNAMICCOMBO_V3",
+                                  {
+                                    "display_name": "encoding mode",
+                                    "tooltip": "Automatic preserves compatible H.264 streams. Re-encode applies custom encoding options.",
+                                    "options": [
+                                      {
+                                        "key": "auto",
+                                        "inputs": {
+                                          "required": {}
+                                        }
+                                      },
+                                      {
+                                        "key": "re-encode",
+                                        "inputs": {
+                                          "required": {
+                                            "crf": [
+                                              "FLOAT",
+                                              {
+                                                "tooltip": "Lower values produce higher quality and larger files.",
+                                                "default": 18.0,
+                                                "min": 0.0,
+                                                "max": 51.0,
+                                                "step": 1.0
+                                              }
+                                            ]
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            }
+                          },
+                          {
+                            "key": "av1",
+                            "inputs": {
+                              "required": {},
+                              "optional": {
+                                "encoding": [
+                                  "COMFY_DYNAMICCOMBO_V3",
+                                  {
+                                    "display_name": "encoding mode",
+                                    "tooltip": "Automatic preserves compatible AV1 streams. Re-encode applies custom encoding options.",
+                                    "options": [
+                                      {
+                                        "key": "auto",
+                                        "inputs": {
+                                          "required": {}
+                                        }
+                                      },
+                                      {
+                                        "key": "re-encode",
+                                        "inputs": {
+                                          "required": {
+                                            "crf": [
+                                              "FLOAT",
+                                              {
+                                                "tooltip": "Lower values produce higher quality and larger files.",
+                                                "default": 24.0,
+                                                "min": 0.0,
+                                                "max": 63.0,
+                                                "step": 1.0
+                                              }
+                                            ]
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "key": "webm",
+                "inputs": {
+                  "required": {
+                    "codec": [
+                      "COMFY_DYNAMICCOMBO_V3",
+                      {
+                        "tooltip": "The output video codec. Auto preserves a compatible source stream. H.264 and AV1 re-encoding support SDR, HDR (HLG), and HDR PQ.",
+                        "options": [
+                          {
+                            "key": "auto",
+                            "inputs": {
+                              "required": {}
+                            }
+                          },
+                          {
+                            "key": "av1",
+                            "inputs": {
+                              "required": {},
+                              "optional": {
+                                "encoding": [
+                                  "COMFY_DYNAMICCOMBO_V3",
+                                  {
+                                    "display_name": "encoding mode",
+                                    "tooltip": "Automatic preserves compatible AV1 streams. Re-encode applies custom encoding options.",
+                                    "options": [
+                                      {
+                                        "key": "auto",
+                                        "inputs": {
+                                          "required": {}
+                                        }
+                                      },
+                                      {
+                                        "key": "re-encode",
+                                        "inputs": {
+                                          "required": {
+                                            "crf": [
+                                              "FLOAT",
+                                              {
+                                                "tooltip": "Lower values produce higher quality and larger files.",
+                                                "default": 24.0,
+                                                "min": 0.0,
+                                                "max": 63.0,
+                                                "step": 1.0
+                                              }
+                                            ]
+                                          }
+                                        }
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "optional": {
+        "codec": [
+          "COMFY_DYNAMICCOMBO_V3",
+          {
+            "tooltip": "The output video codec. Auto preserves a compatible source stream. H.264 and AV1 re-encoding support SDR, HDR (HLG), and HDR PQ.",
+            "hidden": true,
+            "options": [
+              {
+                "key": "auto",
+                "inputs": {
+                  "required": {}
+                }
+              },
+              {
+                "key": "h264",
+                "inputs": {
+                  "required": {},
+                  "optional": {
+                    "encoding": [
+                      "COMFY_DYNAMICCOMBO_V3",
+                      {
+                        "display_name": "encoding mode",
+                        "tooltip": "Automatic preserves compatible H.264 streams. Re-encode applies custom encoding options.",
+                        "options": [
+                          {
+                            "key": "auto",
+                            "inputs": {
+                              "required": {}
+                            }
+                          },
+                          {
+                            "key": "re-encode",
+                            "inputs": {
+                              "required": {
+                                "crf": [
+                                  "FLOAT",
+                                  {
+                                    "tooltip": "Lower values produce higher quality and larger files.",
+                                    "default": 18.0,
+                                    "min": 0.0,
+                                    "max": 51.0,
+                                    "step": 1.0
+                                  }
+                                ]
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "key": "av1",
+                "inputs": {
+                  "required": {},
+                  "optional": {
+                    "encoding": [
+                      "COMFY_DYNAMICCOMBO_V3",
+                      {
+                        "display_name": "encoding mode",
+                        "tooltip": "Automatic preserves compatible AV1 streams. Re-encode applies custom encoding options.",
+                        "options": [
+                          {
+                            "key": "auto",
+                            "inputs": {
+                              "required": {}
+                            }
+                          },
+                          {
+                            "key": "re-encode",
+                            "inputs": {
+                              "required": {
+                                "crf": [
+                                  "FLOAT",
+                                  {
+                                    "tooltip": "Lower values produce higher quality and larger files.",
+                                    "default": 24.0,
+                                    "min": 0.0,
+                                    "max": 63.0,
+                                    "step": 1.0
+                                  }
+                                ]
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "hidden": {
+        "prompt": [
+          "PROMPT"
+        ],
+        "extra_pnginfo": [
+          "EXTRA_PNGINFO"
+        ]
+      }
+    },
+    "output": [
+      "VIDEO"
+    ],
+    "output_is_list": [
+      false
+    ]
+  },
+  "UNETLoader": {
+    "input": {
+      "required": {
+        "unet_name": [
+          [
+            "krea2_turbo_int8_convrot.safetensors",
+            "krea2_demo.safetensors",
+            "minimax_h3_fl2va_pruned_int8_convrot.safetensors"
+          ]
+        ],
+        "weight_dtype": [
+          [
+            "default",
+            "fp8_e4m3fn",
+            "fp8_e4m3fn_fast",
+            "fp8_e5m2"
+          ],
+          {
+            "advanced": true
+          }
+        ]
+      }
+    },
+    "output": [
+      "MODEL"
+    ],
+    "output_is_list": [
+      false
+    ]
+  },
+  "UpscaleModelLoader": {
+    "input": {
+      "required": {
+        "model_name": [
+          [
+            "example-4x.pth"
+          ]
+        ]
+      }
+    },
+    "output": [
+      "UPSCALE_MODEL"
+    ],
+    "output_is_list": [
+      false
+    ]
+  },
+  "VAEDecodeTiled": {
+    "input": {
+      "required": {
+        "samples": [
+          "LATENT"
+        ],
+        "vae": [
+          "VAE"
+        ],
+        "tile_size": [
+          "INT",
+          {
+            "default": 512,
+            "min": 64,
+            "max": 4096,
+            "step": 32,
+            "advanced": true
+          }
+        ],
+        "overlap": [
+          "INT",
+          {
+            "default": 64,
+            "min": 0,
+            "max": 4096,
+            "step": 32,
+            "advanced": true
+          }
+        ],
+        "temporal_size": [
+          "INT",
+          {
+            "default": 64,
+            "min": 8,
+            "max": 4096,
+            "step": 4,
+            "tooltip": "Only used for video VAEs: Amount of frames to decode at a time.",
+            "advanced": true
+          }
+        ],
+        "temporal_overlap": [
+          "INT",
+          {
+            "default": 8,
+            "min": 4,
+            "max": 4096,
+            "step": 4,
+            "tooltip": "Only used for video VAEs: Amount of frames to overlap.",
+            "advanced": true
+          }
+        ]
+      }
+    },
+    "output": [
+      "IMAGE"
+    ],
+    "output_is_list": [
+      false
+    ]
+  },
+  "VAEEncodeTiled": {
+    "input": {
+      "required": {
+        "pixels": [
+          "IMAGE"
+        ],
+        "vae": [
+          "VAE"
+        ],
+        "tile_size": [
+          "INT",
+          {
+            "default": 512,
+            "min": 64,
+            "max": 4096,
+            "step": 64,
+            "advanced": true
+          }
+        ],
+        "overlap": [
+          "INT",
+          {
+            "default": 64,
+            "min": 0,
+            "max": 4096,
+            "step": 32,
+            "advanced": true
+          }
+        ],
+        "temporal_size": [
+          "INT",
+          {
+            "default": 64,
+            "min": 8,
+            "max": 4096,
+            "step": 4,
+            "tooltip": "Only used for video VAEs: Amount of frames to encode at a time.",
+            "advanced": true
+          }
+        ],
+        "temporal_overlap": [
+          "INT",
+          {
+            "default": 8,
+            "min": 4,
+            "max": 4096,
+            "step": 4,
+            "tooltip": "Only used for video VAEs: Amount of frames to overlap.",
+            "advanced": true
+          }
+        ]
+      }
+    },
+    "output": [
+      "LATENT"
+    ],
+    "output_is_list": [
+      false
+    ]
+  },
+  "VAELoader": {
+    "input": {
+      "required": {
+        "vae_name": [
+          [
+            "minimax_h3_video_vae_fp16.safetensors",
+            "qwen_image_vae.safetensors"
+          ]
+        ]
+      }
+    },
+    "output": [
+      "VAE"
+    ],
+    "output_is_list": [
+      false
+    ]
+  },
+  "DLSS5NeuralRendering": {
+    "input": {
+      "required": {
+        "upscaling_mode": [
+          [
+            "1x (DLAA / native)",
+            "1.5x (Quality)",
+            "1.724x (Balanced)",
+            "2x (Performance)",
+            "3x (Ultra Performance)"
+          ],
+          {
+            "default": "1.5x (Quality)"
+          }
+        ],
+        "dlss_model_preset": [
+          [
+            "Default",
+            "J",
+            "K",
+            "L",
+            "M"
+          ],
+          {
+            "default": "M"
+          }
+        ],
+        "image": [
+          "IMAGE"
+        ],
+        "style": [
+          [
+            "natural",
+            "cinematic",
+            "default"
+          ],
+          {
+            "default": "natural"
+          }
+        ],
+        "intensity": [
+          "FLOAT",
+          {
+            "default": 1.0,
+            "min": 0.0,
+            "max": 2.0,
+            "step": 0.05
+          }
+        ],
+        "tone": [
+          "FLOAT",
+          {
+            "default": 2.0,
+            "min": 0.0,
+            "max": 2.0,
+            "step": 0.05
+          }
+        ],
+        "structure": [
+          "FLOAT",
+          {
+            "default": 2.0,
+            "min": 0.0,
+            "max": 2.0,
+            "step": 0.05
+          }
+        ],
+        "skin": [
+          "FLOAT",
+          {
+            "default": 2.0,
+            "min": -1.0,
+            "max": 2.0,
+            "step": 0.05
+          }
+        ],
+        "auto_mask": [
+          "BOOLEAN",
+          {
+            "default": false
+          }
+        ],
+        "temporal_mode": [
+          [
+            "auto",
+            "none"
+          ],
+          {
+            "default": "auto"
+          }
+        ],
+        "scene_change_threshold": [
+          "FLOAT",
+          {
+            "default": 0.24,
+            "min": 0.01,
+            "max": 1.0,
+            "step": 0.01
+          }
+        ],
+        "warmup_frames": [
+          "INT",
+          {
+            "default": 0,
+            "min": 0,
+            "max": 16,
+            "step": 1
+          }
+        ],
+        "gpu_mode": [
+          "BOOLEAN",
+          {
+            "default": true,
+            "label_on": "\ud83d\udfe2 GPU ON",
+            "label_off": "\ud83d\udd34 GPU OFF"
+          }
+        ],
+        "chunk_frames": [
+          "INT",
+          {
+            "default": 32,
+            "min": 0,
+            "max": 256,
+            "step": 1
+          }
+        ],
+        "change_frame": [
+          "INT",
+          {
+            "default": 0,
+            "min": 0,
+            "max": 100000,
+            "step": 1
+          }
+        ]
+      }
+    },
+    "output": [
+      "IMAGE"
+    ],
+    "output_is_list": [
+      false
+    ]
+  }
+}

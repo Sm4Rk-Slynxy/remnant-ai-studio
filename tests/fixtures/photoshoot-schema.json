@@ -1,0 +1,680 @@
+{
+  "CLIPLoader": {
+    "input": {
+      "required": {
+        "clip_name": [
+          [
+            "qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors",
+            "qwen3vl_4b_fp8_scaled.safetensors"
+          ]
+        ],
+        "type": [
+          [
+            "stable_diffusion",
+            "stable_cascade",
+            "sd3",
+            "stable_audio",
+            "mochi",
+            "ltxv",
+            "pixart",
+            "cosmos",
+            "lumina2",
+            "wan",
+            "hidream",
+            "chroma",
+            "ace",
+            "omnigen2",
+            "qwen_image",
+            "hunyuan_image",
+            "flux2",
+            "ovis",
+            "longcat_image",
+            "cogvideox",
+            "lens",
+            "pixeldit",
+            "ideogram4",
+            "boogu",
+            "krea2",
+            "joyimage",
+            "mage",
+            "minimax",
+            "yue2",
+            "flux3",
+            "moss_image"
+          ]
+        ]
+      },
+      "optional": {
+        "device": [
+          [
+            "default",
+            "cpu"
+          ],
+          {
+            "advanced": true
+          }
+        ]
+      }
+    },
+    "output": [
+      "CLIP"
+    ],
+    "output_is_list": [
+      false
+    ]
+  },
+  "CLIPTextEncode": {
+    "input": {
+      "required": {
+        "text": [
+          "STRING",
+          {
+            "multiline": true,
+            "dynamicPrompts": true,
+            "tooltip": "The text to be encoded."
+          }
+        ],
+        "clip": [
+          "CLIP",
+          {
+            "tooltip": "The CLIP model used for encoding the text."
+          }
+        ]
+      }
+    },
+    "output": [
+      "CONDITIONING"
+    ],
+    "output_is_list": [
+      false
+    ]
+  },
+  "ConditioningZeroOut": {
+    "input": {
+      "required": {
+        "conditioning": [
+          "CONDITIONING"
+        ]
+      }
+    },
+    "output": [
+      "CONDITIONING"
+    ],
+    "output_is_list": [
+      false
+    ]
+  },
+  "EmptySD3LatentImage": {
+    "input": {
+      "required": {
+        "width": [
+          "INT",
+          {
+            "default": 1024,
+            "min": 16,
+            "max": 16384,
+            "step": 16
+          }
+        ],
+        "height": [
+          "INT",
+          {
+            "default": 1024,
+            "min": 16,
+            "max": 16384,
+            "step": 16
+          }
+        ],
+        "batch_size": [
+          "INT",
+          {
+            "default": 1,
+            "min": 1,
+            "max": 4096
+          }
+        ]
+      }
+    },
+    "output": [
+      "LATENT"
+    ],
+    "output_is_list": [
+      false
+    ]
+  },
+  "KSampler": {
+    "input": {
+      "required": {
+        "model": [
+          "MODEL",
+          {
+            "tooltip": "The model used for denoising the input latent."
+          }
+        ],
+        "seed": [
+          "INT",
+          {
+            "default": 0,
+            "min": 0,
+            "max": 18446744073709551615,
+            "control_after_generate": true,
+            "tooltip": "The random seed used for creating the noise."
+          }
+        ],
+        "steps": [
+          "INT",
+          {
+            "default": 20,
+            "min": 1,
+            "max": 10000,
+            "tooltip": "The number of steps used in the denoising process."
+          }
+        ],
+        "cfg": [
+          "FLOAT",
+          {
+            "default": 8.0,
+            "min": 0.0,
+            "max": 100.0,
+            "step": 0.1,
+            "round": 0.01,
+            "tooltip": "The Classifier-Free Guidance scale balances creativity and adherence to the prompt. Higher values result in images more closely matching the prompt however too high values will negatively impact quality."
+          }
+        ],
+        "sampler_name": [
+          [
+            "euler",
+            "euler_cfg_pp",
+            "euler_ancestral",
+            "euler_ancestral_cfg_pp",
+            "heun",
+            "heunpp2",
+            "exp_heun_2_x0",
+            "exp_heun_2_x0_sde",
+            "dpm_2",
+            "dpm_2_ancestral",
+            "lms",
+            "dpm_fast",
+            "dpm_adaptive",
+            "dpmpp_2s_ancestral",
+            "dpmpp_2s_ancestral_cfg_pp",
+            "dpmpp_sde",
+            "dpmpp_sde_gpu",
+            "dpmpp_2m",
+            "dpmpp_2m_cfg_pp",
+            "dpmpp_2m_sde",
+            "dpmpp_2m_sde_gpu",
+            "dpmpp_2m_sde_heun",
+            "dpmpp_2m_sde_heun_gpu",
+            "dpmpp_3m_sde",
+            "dpmpp_3m_sde_gpu",
+            "ddpm",
+            "lcm",
+            "ipndm",
+            "ipndm_v",
+            "deis",
+            "cfgpp_ud10_ab",
+            "res_multistep",
+            "res_multistep_cfg_pp",
+            "res_multistep_ancestral",
+            "res_multistep_ancestral_cfg_pp",
+            "gradient_estimation",
+            "gradient_estimation_cfg_pp",
+            "er_sde",
+            "seeds_2",
+            "seeds_3",
+            "sa_solver",
+            "sa_solver_pece",
+            "ddim",
+            "uni_pc",
+            "uni_pc_bh2"
+          ],
+          {
+            "tooltip": "The algorithm used when sampling, this can affect the quality, speed, and style of the generated output."
+          }
+        ],
+        "scheduler": [
+          [
+            "simple",
+            "sgm_uniform",
+            "karras",
+            "exponential",
+            "ddim_uniform",
+            "beta",
+            "normal",
+            "linear_quadratic",
+            "kl_optimal",
+            "beta57"
+          ],
+          {
+            "tooltip": "The scheduler controls how noise is gradually removed to form the image."
+          }
+        ],
+        "positive": [
+          "CONDITIONING",
+          {
+            "tooltip": "The conditioning describing the attributes you want to include in the image."
+          }
+        ],
+        "negative": [
+          "CONDITIONING",
+          {
+            "tooltip": "The conditioning describing the attributes you want to exclude from the image."
+          }
+        ],
+        "latent_image": [
+          "LATENT",
+          {
+            "tooltip": "The latent image to denoise."
+          }
+        ],
+        "denoise": [
+          "FLOAT",
+          {
+            "default": 1.0,
+            "min": 0.0,
+            "max": 1.0,
+            "step": 0.01,
+            "tooltip": "The amount of denoising applied, lower values will maintain the structure of the initial image allowing for image to image sampling."
+          }
+        ]
+      }
+    },
+    "output": [
+      "LATENT"
+    ],
+    "output_is_list": [
+      false
+    ]
+  },
+  "Krea2PersonBuilder": {
+    "input": {
+      "required": {},
+      "hidden": {
+        "PersonState": [
+          "STRING",
+          {
+            "default": "{\"felder\": {\"type\": \"\\u2014\", \"age\": \"\\u2014\", \"ethnicity\": \"\\u2014\", \"skinTone\": \"\\u2014\", \"complexion\": \"\\u2014\", \"height\": \"\\u2014\", \"figure\": \"\\u2014\", \"bust\": \"\\u2014\", \"shoulders\": \"\\u2014\", \"waist\": \"\\u2014\", \"belly\": \"\\u2014\", \"hips\": \"\\u2014\", \"legs\": \"\\u2014\", \"hair\": \"\\u2014\", \"hairColor\": \"\\u2014\", \"hairEffect\": \"\\u2014\", \"faceShape\": \"\\u2014\", \"cheekbones\": \"\\u2014\", \"nose\": \"\\u2014\", \"chin\": \"\\u2014\", \"jawline\": \"\\u2014\", \"eyeShape\": \"\\u2014\", \"browShape\": \"\\u2014\", \"lipShape\": \"\\u2014\", \"eyes\": \"\\u2014\", \"lashes\": \"\\u2014\", \"eyeliner\": \"\\u2014\", \"eyeshadow\": \"\\u2014\", \"blush\": \"\\u2014\", \"lipColor\": \"\\u2014\", \"lipFinish\": \"\\u2014\", \"makeup\": \"\\u2014\", \"nailLength\": \"\\u2014\", \"nailColor\": \"\\u2014\", \"hosiery\": \"\\u2014\", \"hosieryColor\": \"\\u2014\", \"shoes\": \"\\u2014\", \"shoesColor\": \"\\u2014\", \"jewellery\": \"\\u2014\", \"eyewear\": \"\\u2014\", \"headwear\": \"\\u2014\"}, \"mehrfach\": {\"skinFeatures\": []}, \"texte\": {\"ageExact\": \"\", \"details\": \"\"}, \"sektion\": \"Grund\", \"gruppe\": {\"shoes\": \"alle\"}}"
+          }
+        ]
+      }
+    },
+    "output": [
+      "STRING",
+      "STRING"
+    ],
+    "output_is_list": [
+      false,
+      false
+    ]
+  },
+  "Krea2Photoshooting": {
+    "input": {
+      "required": {
+        "seed": [
+          "INT",
+          {
+            "default": 0,
+            "min": 0,
+            "max": 18446744073709551615,
+            "control_after_generate": true
+          }
+        ]
+      },
+      "optional": {
+        "width_in": [
+          "INT",
+          {
+            "forceInput": true
+          }
+        ],
+        "height_in": [
+          "INT",
+          {
+            "forceInput": true
+          }
+        ],
+        "person_data": [
+          "STRING",
+          {
+            "forceInput": true
+          }
+        ]
+      },
+      "hidden": {
+        "ShootingState": [
+          "STRING",
+          {
+            "default": "{\"anzahl\": 12, \"aktiv\": {\"kamera\": true, \"pose\": true, \"ausdruck\": true, \"format\": true, \"fokus\": true, \"rausch\": true}, \"serienSeed\": 0, \"pools\": {}, \"kameras\": [\"Detail\", \"Nahaufnahme\", \"Portr\\u00e4t\", \"Halbtotale\", \"Amerikanisch\", \"Ganzk\\u00f6rper\", \"Totale\"], \"fokusse\": [\"Gesicht\", \"Augen\", \"Lippen\", \"Oberk\\u00f6rper\", \"Dekollet\\u00e9\", \"H\\u00e4nde\", \"Taille\", \"Beine\", \"F\\u00fc\\u00dfe\", \"R\\u00fccken\", \"Ganze Figur\", \"Raum\"], \"groesse\": 1328, \"festesFormat\": \"2:3\"}"
+          }
+        ]
+      }
+    },
+    "output": [
+      "STRING",
+      "STRING",
+      "STRING",
+      "INT",
+      "INT",
+      "INT",
+      "STRING",
+      "STRING",
+      "STRING"
+    ],
+    "output_is_list": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "Krea2PromptJoin": {
+    "input": {
+      "required": {
+        "text": [
+          "STRING",
+          {
+            "forceInput": true
+          }
+        ]
+      },
+      "optional": {
+        "person_1": [
+          "STRING",
+          {
+            "forceInput": true
+          }
+        ],
+        "person_2": [
+          "STRING",
+          {
+            "forceInput": true
+          }
+        ],
+        "person_3": [
+          "STRING",
+          {
+            "forceInput": true
+          }
+        ],
+        "kamera": [
+          "STRING",
+          {
+            "forceInput": true
+          }
+        ],
+        "pose": [
+          "STRING",
+          {
+            "forceInput": true
+          }
+        ],
+        "ausdruck": [
+          "STRING",
+          {
+            "forceInput": true
+          }
+        ],
+        "szene": [
+          "STRING",
+          {
+            "forceInput": true
+          }
+        ],
+        "stil": [
+          "STRING",
+          {
+            "forceInput": true
+          }
+        ],
+        "extra": [
+          "STRING",
+          {
+            "forceInput": true
+          }
+        ]
+      }
+    },
+    "output": [
+      "STRING"
+    ],
+    "output_is_list": [
+      false
+    ]
+  },
+  "LatentUpscaleBy": {
+    "input": {
+      "required": {
+        "samples": [
+          "LATENT"
+        ],
+        "upscale_method": [
+          [
+            "nearest-exact",
+            "bilinear",
+            "area",
+            "bicubic",
+            "bislerp"
+          ]
+        ],
+        "scale_by": [
+          "FLOAT",
+          {
+            "default": 1.5,
+            "min": 0.01,
+            "max": 8.0,
+            "step": 0.01
+          }
+        ]
+      }
+    },
+    "output": [
+      "LATENT"
+    ],
+    "output_is_list": [
+      false
+    ]
+  },
+  "LoraLoaderModelOnly": {
+    "input": {
+      "required": {
+        "model": [
+          "MODEL"
+        ],
+        "lora_name": [
+          [
+            "minimax_h3_fl2v_turbo_4step_v1.0_768p_comfyui.safetensors",
+            "example-image-style.safetensors",
+            "example-video-style.safetensors",
+            "krea2_identity_edit_v1_2.safetensors"
+          ]
+        ],
+        "strength_model": [
+          "FLOAT",
+          {
+            "default": 1.0,
+            "min": -100.0,
+            "max": 100.0,
+            "step": 0.01
+          }
+        ]
+      }
+    },
+    "output": [
+      "MODEL"
+    ],
+    "output_is_list": [
+      false
+    ]
+  },
+  "PreviewAny": {
+    "input": {
+      "required": {
+        "source": [
+          "*",
+          {}
+        ]
+      }
+    },
+    "output": [
+      "STRING"
+    ],
+    "output_is_list": [
+      false
+    ]
+  },
+  "PrimitiveStringMultiline": {
+    "input": {
+      "required": {
+        "value": [
+          "STRING",
+          {
+            "multiline": true
+          }
+        ]
+      }
+    },
+    "output": [
+      "STRING"
+    ],
+    "output_is_list": [
+      false
+    ]
+  },
+  "SaveImage": {
+    "input": {
+      "required": {
+        "images": [
+          "IMAGE",
+          {
+            "tooltip": "The images to save."
+          }
+        ],
+        "filename_prefix": [
+          "STRING",
+          {
+            "default": "ComfyUI",
+            "tooltip": "The prefix for the file to save. This may include formatting information such as %date:yyyy-MM-dd% or %Empty Latent Image.width% to include values from nodes."
+          }
+        ]
+      },
+      "hidden": {
+        "prompt": "PROMPT",
+        "extra_pnginfo": "EXTRA_PNGINFO"
+      }
+    },
+    "output": [
+      "IMAGE"
+    ],
+    "output_is_list": [
+      false
+    ]
+  },
+  "UNETLoader": {
+    "input": {
+      "required": {
+        "unet_name": [
+          [
+            "krea2_turbo_int8_convrot.safetensors",
+            "krea2_demo.safetensors",
+            "minimax_h3_fl2va_pruned_int8_convrot.safetensors"
+          ]
+        ],
+        "weight_dtype": [
+          [
+            "default",
+            "fp8_e4m3fn",
+            "fp8_e4m3fn_fast",
+            "fp8_e5m2"
+          ],
+          {
+            "advanced": true
+          }
+        ]
+      }
+    },
+    "output": [
+      "MODEL"
+    ],
+    "output_is_list": [
+      false
+    ]
+  },
+  "VAEDecode": {
+    "input": {
+      "required": {
+        "samples": [
+          "LATENT",
+          {
+            "tooltip": "The latent to be decoded."
+          }
+        ],
+        "vae": [
+          "VAE",
+          {
+            "tooltip": "The VAE model used for decoding the latent."
+          }
+        ]
+      }
+    },
+    "output": [
+      "IMAGE"
+    ],
+    "output_is_list": [
+      false
+    ]
+  },
+  "VAELoader": {
+    "input": {
+      "required": {
+        "vae_name": [
+          [
+            "minimax_h3_video_vae_fp16.safetensors",
+            "qwen_image_vae.safetensors"
+          ]
+        ]
+      }
+    },
+    "output": [
+      "VAE"
+    ],
+    "output_is_list": [
+      false
+    ]
+  },
+  "TestOnlyFixture": {
+    "input": {
+      "required": {}
+    }
+  },
+  "TestPerson": {
+    "input": {
+      "required": {}
+    }
+  },
+  "TestSeries": {
+    "input": {
+      "required": {}
+    }
+  },
+  "TestSampler": {
+    "input": {
+      "required": {}
+    }
+  },
+  "TestResize": {
+    "input": {
+      "required": {}
+    }
+  },
+  "PrimitiveString": {
+    "input": {
+      "required": {}
+    }
+  }
+}
